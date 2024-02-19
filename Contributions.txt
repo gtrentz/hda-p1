@@ -1,0 +1,12 @@
+Week of 2/12 - 2/18
+
+Overall Task:
+Find and begin to look at the data. Start to consider how might we want to analyze it. Do some basic stats and visuals to accomplish this.
+
+Trevor:
+
+Grant:
+
+Gabe:
+Look at some summary stats in jupyter using pandas. Look at some distributions to understand study size, phasing and even more basic stuff like what columns do we have, what kind of schemas are they using, etc. 
+
