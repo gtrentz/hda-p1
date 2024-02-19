@@ -5,7 +5,8 @@ Find and begin to look at the data. Start to consider how might we want to analy
 
 Trevor:
 
-Grant:
+Grant: Pull down datasets from clinicaltrials.gov, read them into python file to create graphs and make inferences about the data; break 
+different visualizations into functions for better organization
 
 Gabe:
 Look at some summary stats in jupyter using pandas. Look at some distributions to understand study size, phasing and even more basic stuff like what columns do we have, what kind of schemas are they using, etc. 
