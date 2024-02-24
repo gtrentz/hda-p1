@@ -55,3 +55,33 @@ agbl = ['Adult', 'Adult and Older-Adult', 'Child and Adult', 'All', 'Older-Adult
 plt.pie(gbA3 , labels = agbl, autopct='%1.1f%%', shadow=False, startangle=140)
 plt.show()
 '''
+'''
+This monstrosity is a roundabout way to get the top 10 most frequent drugs from the dataset. 
+All of the frequencies are stored in the drugFrequencies dictionary and I pulled out the top 10 in top10.
+'''
+'''
+covid_copy = covid_studies.copy(deep = True)
+
+intTotal = []
+for index, row in covid_copy.loc[:, ['Interventions']].iterrows():
+    x = covid_copy['Interventions'].loc[index].split('|')
+    intTotal = intTotal + x
+
+keyword = ['DRUG:']
+drugList=[]
+for i in keyword:
+    for j in intTotal:
+        if(j.find(i)!=-1):
+            drugList.append(j)
+
+from itertools import groupby
+
+drugFrequencies = {value: len(list(freq)) for value, freq in groupby(sorted(drugList))}
+
+from collections import Counter
+
+n = 10
+counter = Counter(drugFrequencies)
+top10 = dict(counter.most_common(n))
+print(top10)
+'''
