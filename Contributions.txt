@@ -12,3 +12,18 @@ different visualizations into functions for better organization
 Gabe:
 Look at some summary stats in jupyter using pandas. Look at some distributions to understand study size, phasing and even more basic stuff like what columns do we have, what kind of schemas are they using, etc. 
 
+
+Week of 2/19-2/25
+
+Overall Task:
+Segment areas of analysis for individual contribution. (3 columns each to focus on). Began exploratory visual analysis to understand trends which warrant further examination.
+
+Trevor:
+Intervention, Adverse Events, Design Aspect
+
+Grant:
+Phase, Status, Duration
+
+Gabe:
+Type of intervention, Eligibility, Results presented
+Exploratory analysis to get basic stats for my columns of interest. Shared some basic graphics with team to get feedback. 
