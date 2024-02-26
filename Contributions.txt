@@ -23,6 +23,7 @@ Intervention, Adverse Events, Design Aspect
 
 Grant:
 Phase, Status, Duration
+Made some graphs to look for correlation between datapoints and draw analysis; discussed how to organize our findings with the team.
 
 Gabe:
 Type of intervention, Eligibility, Results presented
