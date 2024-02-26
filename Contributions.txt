@@ -20,6 +20,7 @@ Segment areas of analysis for individual contribution. (3 columns each to focus 
 
 Trevor:
 Intervention, Adverse Events, Design Aspect
+Cleaned the Intervention data to help visualize drug types frequencies and intervention types. Basic visualizations to understand the Interventions data.
 
 Grant:
 Phase, Status, Duration
