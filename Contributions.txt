@@ -33,11 +33,12 @@ Exploratory analysis to get basic stats for my columns of interest. Shared some 
 
 Week of 2/26-3/4
 
-Overall Task:
+Overall Task: Finish Part B and start write-up
 
 Trevor:
 used sql to q the aact database and get the SAEs and design aspects. created basic visualizations to show how the data is broken down by the two major categories
 
 Grant:
 
-Gabe
+Gabe:
+Went further in depth to complete analysis for part b related to Type of Intervention, Eligibility, and Results presented. Partial write-up is complete.
