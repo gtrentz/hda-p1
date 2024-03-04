@@ -113,6 +113,40 @@ plt.show()
 """
 
 """
+#Graph of status by current phase
+combined_studies['Start Date'] = pd.to_datetime(combined_studies['Start Date'], errors='coerce')
+combined_studies['Completion Date'] = pd.to_datetime(combined_studies['Completion Date'], errors='coerce')
+combined_studies['Duration'] = (combined_studies['Completion Date'] - combined_studies['Start Date']).dt.days
+plt.figure(figsize=(14, 8))
+sns.countplot(x='Phases', hue='Status', data=combined_studies, order=["EARLY_PHASE1", "PHASE1", "PHASE1|PHASE2", "PHASE2", "PHASE2|PHASE3", "PHASE3", "PHASE4"])
+plt.title('Distribution of Status within Each Phase')
+plt.xlabel('Phases')
+plt.ylabel('Count')
+plt.legend(title='Status', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.show()
+"""
+
+#Status by duration - currently broken
+"""
+combined_studies = combined_studies.dropna(subset=['Start Date', 'Completion Date'])
+print("Unique values in 'Start Date':", combined_studies['Start Date'].unique())
+print("Unique values in 'Completion Date':", combined_studies['Completion Date'].unique())
+# Calculate the duration in days
+combined_studies['Duration'] = (combined_studies['Completion Date'] - combined_studies['Start Date']).dt.days
+
+# Create a boxplot to show the distribution of duration for each status
+plt.figure(figsize=(12, 8))
+sns.boxplot(x='Status', y='Duration', data=combined_studies)
+plt.title('Distribution of Duration for Each Status')
+plt.xlabel('Status')
+plt.ylabel('Duration (days)')
+plt.show()
+"""
+
+
+
+
+"""
 #Ranking of diseases - managed to combine all breast cancer variants into one, no luck
 #with COVID. (Part C/2)
 combined_studies['Study Type'] = combined_studies['Study Type'].replace({'COVID-19': 'COVID', 'Covid19': 'COVID'})

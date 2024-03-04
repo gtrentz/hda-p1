@@ -39,6 +39,7 @@ Trevor:
 used sql to q the aact database and get the SAEs and design aspects. created basic visualizations to show how the data is broken down by the two major categories
 
 Grant:
+Created visualizations of assigned variables. Compiled ranking of most common diseases and # of trials by 2 month period
 
 Gabe:
 Went further in depth to complete analysis for part b related to Type of Intervention, Eligibility, and Results presented. Partial write-up is complete.
