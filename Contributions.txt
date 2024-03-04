@@ -36,6 +36,7 @@ Week of 2/26-3/4
 Overall Task:
 
 Trevor:
+used sql to q the aact database and get the SAEs and design aspects. created basic visualizations to show how the data is broken down by the two major categories
 
 Grant:
 
