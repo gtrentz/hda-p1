@@ -2,14 +2,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-covid_studies = pd.read_csv("C:\\Users\\terra\\OneDrive\\Desktop\\hda-p1\\covid.csv")
-breast_cancer_studies = pd.read_csv("C:\\Users\\terra\\OneDrive\\Desktop\\hda-p1\\breast.csv")
+covid_studies = pd.read_csv("covid.csv")
+breast_cancer_studies = pd.read_csv("breast.csv")
 
 covid_studies['Study Type'] = 'COVID'
 breast_cancer_studies['Study Type'] = 'Breast Cancer'
 
 combined_studies = pd.concat([covid_studies, breast_cancer_studies], ignore_index=True)
 
+"""
 plt.figure(figsize=(10, 6))
 order = ["EARLY_PHASE1", "PHASE1", "PHASE1|PHASE2", "PHASE2", "PHASE2|PHASE3", "PHASE3", "PHASE4"]
 sns.countplot(x='Phases', hue='Study Type', data=combined_studies, order=order)
@@ -17,6 +18,7 @@ plt.title('Comparison of Study Phases between COVID and Breast Cancer Studies')
 plt.xlabel('Phase of Study')
 plt.ylabel('Count')
 plt.show()
+"""
 
 '''
 Trevor:
@@ -85,3 +87,63 @@ counter = Counter(drugFrequencies)
 top10 = dict(counter.most_common(n))
 print(top10)
 '''
+
+#Enrollment by funder type
+"""
+plt.figure(figsize=(12, 8))
+sns.scatterplot(x='Funder Type', y='Enrollment', hue='Study Type', data=combined_studies)
+plt.title('Enrollment by Funder Type')
+plt.xlabel('Funder Type')
+plt.ylabel('Enrollment')
+plt.legend(title='Study Type')
+plt.show()
+"""
+
+"""
+#Enrollment of studies at each phase
+order = ["EARLY_PHASE1", "PHASE1", "PHASE1|PHASE2", "PHASE2", "PHASE2|PHASE3", "PHASE3", "PHASE4"]
+combined_studies_sorted = combined_studies.sort_values(by='Phases', key=lambda x: x.map({phase: i for i, phase in enumerate(order)}))
+plt.figure(figsize=(12, 8))
+sns.scatterplot(x='Phases', y='Enrollment', hue='Study Type', data=combined_studies_sorted)
+plt.title('Enrollment by Study Phase')
+plt.xlabel('Study Phase')
+plt.ylabel('Enrollment')
+plt.legend(title='Study Type')
+plt.show()
+"""
+
+"""
+#Ranking of diseases - managed to combine all breast cancer variants into one, no luck
+#with COVID. (Part C/2)
+combined_studies['Study Type'] = combined_studies['Study Type'].replace({'COVID-19': 'COVID', 'Covid19': 'COVID'})
+combined_studies.loc[combined_studies['Conditions'].str.contains('Breast Cancer', case=False, na=False), 'Conditions'] = 'Breast Cancer'
+combined_studies['Conditions_List'] = combined_studies['Conditions'].str.split('|')
+exploded_studies = combined_studies.explode('Conditions_List')
+condition_counts = exploded_studies['Conditions_List'].value_counts()
+top_conditions = condition_counts.head(10)
+plt.figure(figsize=(12, 8))
+sns.barplot(x=top_conditions.values, y=top_conditions.index, palette='viridis')
+plt.title('Top 10 Most Common Conditions in Clinical Trials')
+plt.xlabel('Number of Trials')
+plt.ylabel('Condition')
+plt.show()
+"""
+"""
+#Number of trials by 2 month period (Part C/3)
+#Not exactly sure why the x-axis is labeled like so
+combined_studies['Start Date'] = pd.to_datetime(combined_studies['Start Date'], errors='coerce')
+combined_studies['Period'] = combined_studies['Start Date'].dt.to_period('2M')
+covid_data = combined_studies[combined_studies['Study Type'] == 'COVID']
+breast_cancer_data = combined_studies[combined_studies['Study Type'] == 'Breast Cancer']
+covid_counts = covid_data['Period'].value_counts().sort_index()
+breast_cancer_counts = breast_cancer_data['Period'].value_counts().sort_index()
+plt.figure(figsize=(12, 8))
+sns.lineplot(x=covid_counts.index.astype(str), y=covid_counts.values, label='COVID')
+sns.lineplot(x=breast_cancer_counts.index.astype(str), y=breast_cancer_counts.values, label='Breast Cancer')
+plt.title('Number of Trials for COVID and Breast Cancer, Bimonthly')
+plt.xlabel('Period')
+plt.ylabel('Number of Trials')
+plt.xticks(rotation=90, ha='right')
+plt.legend()
+plt.show()
+"""
