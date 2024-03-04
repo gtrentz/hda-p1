@@ -29,3 +29,14 @@ Made some graphs to look for correlation between datapoints and draw analysis; d
 Gabe:
 Type of intervention, Eligibility, Results presented
 Exploratory analysis to get basic stats for my columns of interest. Shared some basic graphics with team to get feedback. 
+
+
+Week of 2/26-3/4
+
+Overall Task:
+
+Trevor:
+
+Grant:
+
+Gabe
