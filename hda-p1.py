@@ -112,38 +112,79 @@ plt.legend(title='Study Type')
 plt.show()
 """
 
-"""
-#Graph of status by current phase
+#Status of studies in each phase
 combined_studies['Start Date'] = pd.to_datetime(combined_studies['Start Date'], errors='coerce')
 combined_studies['Completion Date'] = pd.to_datetime(combined_studies['Completion Date'], errors='coerce')
 combined_studies['Duration'] = (combined_studies['Completion Date'] - combined_studies['Start Date']).dt.days
+combined_studies = combined_studies[combined_studies['Duration'] >= 0]
+order = ["EARLY_PHASE1", "PHASE1", "PHASE1|PHASE2", "PHASE2", "PHASE2|PHASE3", "PHASE3", "PHASE4"]
+combined_studies['Phases'] = pd.Categorical(combined_studies['Phases'], categories=order, ordered=True)
+covid_studies = combined_studies[combined_studies['Study Type'] == 'COVID']
+breast_cancer_studies = combined_studies[combined_studies['Study Type'] == 'Breast Cancer']
+#Had to add this bc it was putting the colors in the same order but not the statuses
+status_order = ['COMPLETED', 'RECRUITING', 'TERMINATED', 'ACTIVE_NOT_RECRUITING', 'UNKNOWN', 'WITHDRAWN',
+                'NOT_YET_RECRUITING', 'ENROLLING_BY_INVITATION', 'SUSPENDED']
+#Had to add this because it was confusing looking at different legends
+status_colors = {
+    'COMPLETED': 'darkblue',
+    'RECRUITING': 'darkgreen',
+    'TERMINATED': 'darkred',
+    'ACTIVE_NOT_RECRUITING': 'darkorange',
+    'UNKNOWN': 'purple',
+    'WITHDRAWN': 'brown',
+    'NOT_YET_RECRUITING': 'darkcyan',
+    'ENROLLING_BY_INVITATION': 'darkmagenta',
+    'SUSPENDED': 'black'
+}
+custom_palette = [sns.set_hls_values(color, l=0.5) for color in status_colors.values()]
+
+#COVID
 plt.figure(figsize=(14, 8))
-sns.countplot(x='Phases', hue='Status', data=combined_studies, order=["EARLY_PHASE1", "PHASE1", "PHASE1|PHASE2", "PHASE2", "PHASE2|PHASE3", "PHASE3", "PHASE4"])
-plt.title('Distribution of Status within Each Phase')
+sns.countplot(x='Phases', hue='Status', data=covid_studies, order=order, palette=custom_palette, hue_order=status_order)
+plt.title('Status within Each Phase - COVID')
 plt.xlabel('Phases')
 plt.ylabel('Count')
-plt.legend(title='Status', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.legend(title='Status', bbox_to_anchor=(0.75, 1), loc='upper left')
 plt.show()
-"""
 
-#Status by duration - currently broken
+#Breast Cancer
+plt.figure(figsize=(14, 8))
+sns.countplot(x='Phases', hue='Status', data=breast_cancer_studies, order=order, palette=custom_palette, hue_order=status_order)
+plt.title('Status within Each Phase - Breast Cancer')
+plt.xlabel('Phases')
+plt.ylabel('Count')
+plt.legend(title='Status', bbox_to_anchor=(0.75, 1), loc='upper left')
+plt.show()
+
 """
-combined_studies = combined_studies.dropna(subset=['Start Date', 'Completion Date'])
-print("Unique values in 'Start Date':", combined_studies['Start Date'].unique())
-print("Unique values in 'Completion Date':", combined_studies['Completion Date'].unique())
-# Calculate the duration in days
+#Duration of each study by phase
+combined_studies['Start Date'] = pd.to_datetime(combined_studies['Start Date'], errors='coerce')
+combined_studies['Completion Date'] = pd.to_datetime(combined_studies['Completion Date'], errors='coerce')
 combined_studies['Duration'] = (combined_studies['Completion Date'] - combined_studies['Start Date']).dt.days
+combined_studies = combined_studies[combined_studies['Duration'] >= 0]
+order = ["EARLY_PHASE1", "PHASE1", "PHASE1|PHASE2", "PHASE2", "PHASE2|PHASE3", "PHASE3", "PHASE4"]
+combined_studies['Phases'] = pd.Categorical(combined_studies['Phases'], categories=order, ordered=True)
+covid_studies = combined_studies[combined_studies['Study Type'] == 'COVID']
+breast_cancer_studies = combined_studies[combined_studies['Study Type'] == 'Breast Cancer']
 
-# Create a boxplot to show the distribution of duration for each status
+#COVID
 plt.figure(figsize=(12, 8))
-sns.boxplot(x='Status', y='Duration', data=combined_studies)
-plt.title('Distribution of Duration for Each Status')
-plt.xlabel('Status')
-plt.ylabel('Duration (days)')
+sns.scatterplot(x='Phases', y='Duration', data=covid_studies, hue='Study Type')
+plt.title('Duration vs. Phase of COVID Studies')
+plt.xlabel('Phase of Study')
+plt.ylabel('Duration (Days)')
+plt.legend(title='Study Type')
+plt.show()
+
+#Breast Cancer
+plt.figure(figsize=(12, 8))
+sns.scatterplot(x='Phases', y='Duration', data=breast_cancer_studies, hue='Study Type')
+plt.title('Duration vs. Phase of Breast Cancer Studies')
+plt.xlabel('Phase of Study')
+plt.ylabel('Duration (Days)')
+plt.legend(title='Study Type')
 plt.show()
 """
-
-
 
 
 """
@@ -162,22 +203,28 @@ plt.xlabel('Number of Trials')
 plt.ylabel('Condition')
 plt.show()
 """
+
 """
 #Number of trials by 2 month period (Part C/3)
 #Not exactly sure why the x-axis is labeled like so
-combined_studies['Start Date'] = pd.to_datetime(combined_studies['Start Date'], errors='coerce')
-combined_studies['Period'] = combined_studies['Start Date'].dt.to_period('2M')
+combined_studies['Start Date'] = pd.to_datetime(combined_studies['Start Date'], errors='coerce')combined_studies['Period'] = combined_studies['Start Date'].dt.to_period('M').dt.to_timestamp() + pd.offsets.MonthBegin(1)
+combined_studies['Period'] = (combined_studies['Period'].dt.year.astype(str) + '-' +
+                              ((combined_studies['Period'].dt.month - 1) // 3 + 1).astype(str))
 covid_data = combined_studies[combined_studies['Study Type'] == 'COVID']
 breast_cancer_data = combined_studies[combined_studies['Study Type'] == 'Breast Cancer']
-covid_counts = covid_data['Period'].value_counts().sort_index()
-breast_cancer_counts = breast_cancer_data['Period'].value_counts().sort_index()
+covid_counts = covid_data.groupby('Period').size().reset_index(name='Count')
+breast_cancer_counts = breast_cancer_data.groupby('Period').size().reset_index(name='Count')
+covid_counts['Count'] = covid_counts['Count'].astype(int)
+breast_cancer_counts['Count'] = breast_cancer_counts['Count'].astype(int)
+covid_counts = covid_counts[covid_counts['Period'] != 'nan-nan']
+breast_cancer_counts = breast_cancer_counts[breast_cancer_counts['Period'] != 'nan-nan']
 plt.figure(figsize=(12, 8))
-sns.lineplot(x=covid_counts.index.astype(str), y=covid_counts.values, label='COVID')
-sns.lineplot(x=breast_cancer_counts.index.astype(str), y=breast_cancer_counts.values, label='Breast Cancer')
-plt.title('Number of Trials for COVID and Breast Cancer, Bimonthly')
+sns.lineplot(x=covid_counts['Period'], y=covid_counts['Count'], label='COVID')
+sns.lineplot(x=breast_cancer_counts['Period'], y=breast_cancer_counts['Count'], label='Breast Cancer')
+plt.title('Number of Trials for COVID and Breast Cancer, Trimonthly')
 plt.xlabel('Period')
 plt.ylabel('Number of Trials')
-plt.xticks(rotation=90, ha='right')
+plt.xticks(rotation=45, ha='right')
 plt.legend()
 plt.show()
 """
